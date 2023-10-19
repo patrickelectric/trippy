@@ -1,25 +1,9 @@
 name: release
-on:
-  workflow_dispatch:
-  pull_request:
-  push:
+
+on: [push, pull_request]
 
 jobs:
-  create-release:
-    name: create-release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.release.outputs.upload_url }}
-      trip_version: ${{ env.TRIP_VERSION }}
-    steps:
-      - name: Get the release version from the tag
-        shell: bash
-        run: |
-          ls
-
-  build-release:
-    name: build-release
-    needs: ['create-release']
+  build:
     runs-on: ${{ matrix.os }}
     env:
       CARGO: cargo
