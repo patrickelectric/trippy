@@ -11,6 +11,7 @@ jobs:
       TARGET_DIR: ./target
       RUST_BACKTRACE: 1
     strategy:
+      fail-fast: false
       matrix:
         build: [linux-gnu, linux-musl, linux-arm64, linux-armv7, macos, netbsd, win-msvc]
         include:
@@ -141,6 +142,7 @@ jobs:
 
       - name: Upload release archive
         uses: actions/upload-release-asset@v1.0.1
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
