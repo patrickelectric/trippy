@@ -5,33 +5,8 @@ on:
   push:
 
 jobs:
-  create-release:
-    name: create-release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.release.outputs.upload_url }}
-      trip_version: ${{ env.TRIP_VERSION }}
-    steps:
-      - name: Get the release version from the tag
-        shell: bash
-        if: env.TRIP_VERSION == ''
-        run: |
-          echo "TRIP_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "version is: ${{ env.TRIP_VERSION }}"
-      - name: Create GitHub release
-        id: release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TRIP_VERSION }}
-          release_name: Trippy ${{ env.TRIP_VERSION }}
-          body: See [CHANGELOG.md](https://github.com/fujiapple852/trippy/blob/master/CHANGELOG.md) for details.
-          prerelease: false
-
   build-release:
     name: build-release
-    needs: ['create-release']
     runs-on: ${{ matrix.os }}
     env:
       CARGO: cargo
